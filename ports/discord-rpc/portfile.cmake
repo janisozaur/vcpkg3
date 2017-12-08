@@ -23,6 +23,7 @@ endif()
 
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
+    PREFER_NINJA
     OPTIONS
     -DBUILD_DYNAMIC_LIB=${BUILD_DYNAMIC_LIB}
 )
