@@ -1,0 +1,31 @@
+version: 1.0.{build}
+image: Visual Studio 2017 Preview
+build_script:
+- cmd: >-
+    .\bootstrap-vcpkg.bat
+
+    .\vcpkg integrate install
+
+    echo updated
+    
+    vcpkg install discord-rpc:x86-uwp
+
+    vcpkg install discord-rpc:arm-uwp
+
+    vcpkg install discord-rpc:x64-uwp
+
+    vcpkg install discord-rpc:x86-windows-static
+
+    vcpkg install discord-rpc:x86-windows
+
+    vcpkg install discord-rpc:x64-windows-static
+
+    vcpkg install discord-rpc:x64-windows
+
+on_failure:
+
+- cmd: >-
+
+    type C:\Tools\vcpkg\buildtrees\discord-rpc\install-x86-uwp-rel-out.log
+
+    type C:\Tools\vcpkg\buildtrees\discord-rpc\install-x86-uwp-rel-err.log
