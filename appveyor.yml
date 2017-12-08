@@ -8,12 +8,6 @@ build_script:
 
     echo updated
 
-    vcpkg install jansson:x86-uwp
-
-    vcpkg install jansson:x64-uwp
-
-    vcpkg install jansson:arm-uwp
-
     vcpkg install jansson:x86-windows-static
 
     vcpkg install jansson:x86-windows
