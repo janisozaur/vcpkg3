@@ -26,6 +26,6 @@ on_failure:
 
 - cmd: >-
 
-    type C:\Tools\vcpkg\buildtrees\discord-rpc\install-x86-uwp-rel-out.log
+    type C:\projects\vcpkg\buildtrees\discord-rpc\install-x86-uwp-rel-out.log
 
-    type C:\Tools\vcpkg\buildtrees\discord-rpc\install-x86-uwp-rel-err.log
+    type C:\projects\vcpkg\buildtrees\discord-rpc\install-x86-uwp-rel-err.log
