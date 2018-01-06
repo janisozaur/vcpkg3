@@ -16,11 +16,13 @@ vcpkg_apply_patches(
 if(VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
     vcpkg_configure_cmake(
         SOURCE_PATH ${SOURCE_PATH}
+        PREFER_NINJA
         OPTIONS -DBUILD_SHARED_LIBS=OFF
     )
 else()
     vcpkg_configure_cmake(
         SOURCE_PATH ${SOURCE_PATH}
+        PREFER_NINJA
         OPTIONS -DBUILD_SHARED_LIBS=OFF
     )
 endif()
