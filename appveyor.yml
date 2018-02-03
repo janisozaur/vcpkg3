@@ -16,7 +16,7 @@ build_script:
 
     echo updated
 
-    vcpkg install curl:x86-windows discord-rpc:x86-windows freetype:x86-windows jansson:x86-windows libpng:x86-windows libzip:x86-windows openssl:x86-windows sdl2:x86-windows speexdsp:x86-windows zlib:x86-windows
+    .\vcpkg install curl:x86-windows discord-rpc:x86-windows freetype:x86-windows jansson:x86-windows libpng:x86-windows libzip:x86-windows openssl:x86-windows sdl2:x86-windows speexdsp:x86-windows zlib:x86-windows
 
 on_failure:
 
