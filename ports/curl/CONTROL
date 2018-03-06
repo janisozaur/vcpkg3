@@ -16,6 +16,9 @@ Build-Depends: nghttp2, ssl
 Description: HTTP2 support
 
 Feature: ssl
+Description: SSL support
+
+Feature: ssl-openssl
 Build-Depends: openssl
 Description: SSL support
 
