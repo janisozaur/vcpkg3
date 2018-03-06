@@ -29,6 +29,7 @@ vcpkg_configure_cmake(
         -DFORCE_STATIC_VCRT=${FORCE_STATIC_VCRT}
         -DLIBC=ON
         -DSDL_JOYSTICK=OFF
+        -DSDL_HAPTIC=OFF
 )
 
 vcpkg_install_cmake()
