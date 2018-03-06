@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8f1e828d1..c8821c30f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1261,7 +1261,7 @@ elseif(WINDOWS)
+   endif()
+ 
+   # Libraries for Win32 native and MinGW
+-  list(APPEND EXTRA_LIBS user32 gdi32 winmm imm32 ole32 oleaut32 version uuid)
++  list(APPEND EXTRA_LIBS user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32)
+ 
+   # TODO: in configure.in the check for timers is set on
+   # cygwin | mingw32* - does this include mingw32CE?
+@@ -1303,7 +1303,6 @@ elseif(WINDOWS)
+     set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
+     if(HAVE_DINPUT_H)
+       set(SDL_JOYSTICK_DINPUT 1)
+-      list(APPEND EXTRA_LIBS dinput8)
+       if(CMAKE_COMPILER_IS_MINGW)
+         list(APPEND EXTRA_LIBS dxerr8)
+       elseif (NOT USE_WINSDK_DIRECTX)

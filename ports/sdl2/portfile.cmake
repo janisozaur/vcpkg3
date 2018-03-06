@@ -13,6 +13,7 @@ vcpkg_apply_patches(
     PATCHES
         ${CMAKE_CURRENT_LIST_DIR}/export-symbols-only-in-shared-build.patch
         ${CMAKE_CURRENT_LIST_DIR}/enable-winrt-cmake.patch
+        ${CMAKE_CURRENT_LIST_DIR}/fix-arm.patch
 )
 
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static" SDL_STATIC)
@@ -28,8 +29,6 @@ vcpkg_configure_cmake(
         -DVIDEO_VULKAN=OFF
         -DFORCE_STATIC_VCRT=${FORCE_STATIC_VCRT}
         -DLIBC=ON
-        -DSDL_JOYSTICK=OFF
-        -DSDL_HAPTIC=OFF
 )
 
 vcpkg_install_cmake()
