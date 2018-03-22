@@ -59,12 +59,12 @@ function fetchToolInternal([Parameter(Mandatory=$true)][string]$tool)
         $outFilename = (Get-ChildItem $downloadPath).BaseName
         Write-Host "Extracting $tool..."
         vcpkgExtractFile -File $downloadPath -DestinationDir $downloadsDir -outFilename $outFilename
-        Write-Host "Extracting $tool has completed successfully."
+        Write-Host "Extracting $tool has completed successfully. dp = $downloadPath dd = $downloadsDir of = $outFilename"
     }
 
     if (-not (Test-Path $exePath))
     {
-        throw ("Could not detect or download " + $tool)
+        throw ("Could not detect or download " + $tool + " at " + $exePath)
     }
 
     return $exePath
