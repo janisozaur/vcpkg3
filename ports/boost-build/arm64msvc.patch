@@ -1,8 +1,8 @@
 diff --git a/src/tools/msvc.jam b/src/tools/msvc.jam
-index e6c0b60..62c3a41 100644
+index dda22b4c5..8d7a7b446 100644
 --- a/src/tools/msvc.jam
 +++ b/src/tools/msvc.jam
-@@ -466,6 +466,7 @@ rule configure-version-specific ( toolset : version : conditions )
+@@ -468,6 +468,7 @@ rule configure-version-specific ( toolset : version : conditions )
          toolset.flags $(toolset).link LINKFLAGS $(conditions)/$(.cpu-arch-i386)  : "/MACHINE:X86" ;
          toolset.flags $(toolset).link LINKFLAGS $(conditions)/$(.cpu-arch-ia64)  : "/MACHINE:IA64" ;
          toolset.flags $(toolset).link LINKFLAGS $(conditions)/$(.cpu-arch-arm)   : "/MACHINE:ARM" ;
@@ -10,16 +10,41 @@ index e6c0b60..62c3a41 100644
  
          # Make sure that manifest will be generated even if there is no
          # dependencies to put there.
-@@ -1256,7 +1257,7 @@ local rule configure-really ( version ? : options * )
+@@ -534,15 +535,9 @@ rule compile.asm ( targets + : sources * : properties * )
+     set-setup-command $(targets) : $(properties) ;
+ }
+ 
+-# For the assembler the following options are turned on by default:
+-#
+-#   -Zp4   align structures to 4 bytes
+-#   -Cp    preserve case of user identifiers
+-#   -Cx    preserve case in publics, externs
+-#
+ actions compile.asm
+ {
+-    $(.SETUP) $(.ASM) -c -Zp4 -Cp -Cx -D$(DEFINES) $(ASMFLAGS) $(USER_ASMFLAGS) -Fo "$(<:W)" "$(>:W)"
++    $(.SETUP) $(.ASM) -D$(ASMDEFINES) $(ASMFLAGS) $(USER_ASMFLAGS) $(.ASM_OUTPUT) "$(<:W)" "$(>:W)"
+ }
+ 
+ 
+@@ -1281,8 +1276,8 @@ local rule configure-really ( version ? : options * )
+ 
          local below-8.0 = [ MATCH "^([67]\\.)" : $(version) ] ;
          local below-11.0 = [ MATCH "^([6789]\\.|10\\.)" : $(version) ] ;
-         
+-        
 -        local cpu = i386 amd64 ia64 arm ;
++
 +        local cpu = i386 amd64 ia64 arm arm64 ;
          if $(below-8.0)
          {
              cpu = i386 ;
-@@ -1270,6 +1271,7 @@ local rule configure-really ( version ? : options * )
+@@ -1291,11 +1286,12 @@ local rule configure-really ( version ? : options * )
+         {
+             cpu = i386 amd64 ia64 ;
+         }
+-        
++
+         local setup-amd64 ;
          local setup-i386 ;
          local setup-ia64 ;
          local setup-arm ;
@@ -27,7 +52,7 @@ index e6c0b60..62c3a41 100644
          local setup-phone-i386 ;
          local setup-phone-arm ;
  
-@@ -1327,6 +1329,7 @@ local rule configure-really ( version ? : options * )
+@@ -1353,6 +1349,7 @@ local rule configure-really ( version ? : options * )
              local default-setup-i386  = vcvars32.bat ;
              local default-setup-ia64  = vcvarsx86_ia64.bat ;
              local default-setup-arm   = vcvarsx86_arm.bat ;
@@ -35,7 +60,7 @@ index e6c0b60..62c3a41 100644
              local default-setup-phone-i386 = vcvarsphonex86.bat ;
              local default-setup-phone-arm = vcvarsphonex86_arm.bat ;
  
-@@ -1338,6 +1341,7 @@ local rule configure-really ( version ? : options * )
+@@ -1364,6 +1361,7 @@ local rule configure-really ( version ? : options * )
              local default-global-setup-options-i386  = x86 ;
              local default-global-setup-options-ia64  = x86_ia64 ;
              local default-global-setup-options-arm   = x86_arm ;
@@ -43,15 +68,75 @@ index e6c0b60..62c3a41 100644
  
              # When using 64-bit Windows, and targeting 64-bit, it is possible to
              # use a native 64-bit compiler, selected by the "amd64" & "ia64"
-@@ -1418,6 +1422,7 @@ local rule configure-really ( version ? : options * )
+@@ -1443,7 +1441,26 @@ local rule configure-really ( version ? : options * )
+         local default-assembler-amd64 = ml64 ;
          local default-assembler-i386  = "ml -coff" ;
          local default-assembler-ia64  = ias ;
-         local default-assembler-ia64  = armasm ;
+-        local default-assembler-ia64  = armasm ;
++        local default-assembler-arm   = armasm ;
 +        local default-assembler-arm64 = armasm64 ;
++
++        # For the assembler the following options are turned on by default:
++        #
++        #   -Zp4   align structures to 4 bytes
++        #   -Cp    preserve case of user identifiers
++        #   -Cx    preserve case in publics, externs
++        #
++        local assembler-flags-amd64 = "-c -Zp4 -Cp -Cx" ;
++        local assembler-flags-i386  = "-c -Zp4 -Cp -Cx" ;
++        local assembler-flags-ia64  = "-c -Zp4 -Cp -Cx" ;
++        local assembler-flags-arm   = "" ;
++        local assembler-flags-arm64 = "" ;
++
++        local assembler-output-flag-amd64 = -Fo ;
++        local assembler-output-flag-i386  = -Fo ;
++        local assembler-output-flag-ia64  = -Fo ;
++        local assembler-output-flag-arm   = -o ;
++        local assembler-output-flag-arm64 = -o ;
  
          assembler = [ feature.get-values <assembler> : $(options) ] ;
  
-@@ -1932,6 +1937,9 @@ if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ]
+@@ -1476,6 +1493,8 @@ local rule configure-really ( version ? : options * )
+ 
+             local cpu-assembler = $(assembler) ;
+             cpu-assembler ?= $(default-assembler-$(c)) ;
++            local assembler-flags = $(assembler-flags-$(c)) ;
++            local assembler-output-flag = $(assembler-output-flag-$(c)) ;
+ 
+             for local api in desktop store phone
+             {
+@@ -1517,7 +1536,8 @@ local rule configure-really ( version ? : options * )
+                 {
+                     toolset.flags msvc.compile .CC  <windows-api>$(api)/$(cpu-conditions) : $(compiler) /Zm800 /ZW /EHsc -nologo ;
+                 }
+-                toolset.flags msvc.compile .ASM <windows-api>$(api)/$(cpu-conditions) : $(cpu-assembler) -nologo ;
++                toolset.flags msvc.compile .ASM <windows-api>$(api)/$(cpu-conditions) : $(cpu-assembler) $(assembler-flags) -nologo ;
++                toolset.flags msvc.compile .ASM_OUTPUT <windows-api>$(api)/$(cpu-conditions) : $(assembler-output-flag) ;
+                 toolset.flags msvc.link    .LD  <windows-api>$(api)/$(cpu-conditions) : $(linker) /NOLOGO "/INCREMENTAL:NO" ;
+                 toolset.flags msvc.archive .LD  <windows-api>$(api)/$(cpu-conditions) : $(linker) /lib /NOLOGO  ;
+             }
+@@ -1805,14 +1825,14 @@ local rule register-toolset-really ( )
+     # Declare flags for the assembler.
+     toolset.flags msvc.compile.asm USER_ASMFLAGS <asmflags> ;
+ 
+-    toolset.flags msvc.compile.asm ASMFLAGS <debug-symbols>on : "/Zi /Zd" ;
++    toolset.flags msvc.compile.asm ASMFLAGS <architecture>x86/<debug-symbols>on : "/Zi /Zd" ;
+ 
+-    toolset.flags msvc.compile.asm ASMFLAGS <warnings>on : /W3 ;
+-    toolset.flags msvc.compile.asm ASMFLAGS <warnings>off : /W0 ;
+-    toolset.flags msvc.compile.asm ASMFLAGS <warnings>all : /W4 ;
+-    toolset.flags msvc.compile.asm ASMFLAGS <warnings-as-errors>on : /WX ;
++    toolset.flags msvc.compile.asm ASMFLAGS <architecture>x86/<warnings>on : /W3 ;
++    toolset.flags msvc.compile.asm ASMFLAGS <architecture>x86/<warnings>off : /W0 ;
++    toolset.flags msvc.compile.asm ASMFLAGS <architecture>x86/<warnings>all : /W4 ;
++    toolset.flags msvc.compile.asm ASMFLAGS <architecture>x86/<warnings-as-errors>on : /WX ;
+ 
+-    toolset.flags msvc.compile.asm DEFINES <define> ;
++    toolset.flags msvc.compile.asm ASMDEFINES <architecture>x86 : <define> ;
+ 
+     # Declare flags for linking.
+     {
+@@ -1937,6 +1957,9 @@ if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ]
      <architecture>arm/<address-model>
      <architecture>arm/<address-model>32 ;
  

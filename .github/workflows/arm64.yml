@@ -1,0 +1,32 @@
+name: arm64
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: list dir
+      run: ls
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: install boost-build
+      run: vcpkg.exe install boost-build
+    - name: install boost-context
+      run: vcpkg.exe install boost-context:arm64-windows
+    - name: show logs context
+      if: always()
+      run: type D:\a\vcpkg\vcpkg\buildtrees\boost-context\build-arm64-windows-rel-out.log
+    - uses: actions/upload-artifact@master
+      with:
+        name: boost-context-buildtree
+        path: D:\a\vcpkg\vcpkg\buildtrees\boost-context\
+      if: always()
+
