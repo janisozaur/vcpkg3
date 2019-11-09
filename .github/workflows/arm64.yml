@@ -20,13 +20,26 @@ jobs:
     - name: install boost-build
       run: vcpkg.exe install boost-build
     - name: install boost-context
-      run: vcpkg.exe install boost-context:arm64-windows
+      run: vcpkg.exe install boost-context:arm64-windows-static boost-test:arm64-windows-static
     - name: show logs context
       if: always()
       run: type D:\a\vcpkg\vcpkg\buildtrees\boost-context\build-arm64-windows-rel-out.log
+    - name: Download ninja
+      run: |
+        bitsadmin /transfer myDownloadJob /download /priority normal https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip c:\ninja.zip
+        7z x C:\ninja.zip -oC:\
+        set PATH=C:\;%PATH%
+        ninja --version
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64_arm64
+        cl
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows-static ..
     - uses: actions/upload-artifact@master
       with:
         name: boost-context-buildtree
         path: D:\a\vcpkg\vcpkg\buildtrees\boost-context\
       if: always()
-
+    - uses: actions/upload-artifact@master
+      with:
+        name: boost-context-buildtree
+        path: D:\a\vcpkg\vcpkg\buildtrees\boost-context\
+      if: always()
