@@ -13,14 +13,23 @@ jobs:
       run: git --no-pager show HEAD
     - name: bootstrap vcpkg
       run: bootstrap-vcpkg.bat
-    - name: list dir
-      run: ls
+    - name: clone scummvm
+      run: git clone https://github.com/scummvm/scummvm
     - name: show git head
       run: git --no-pager show HEAD
     - name: install boost-build
       run: vcpkg.exe install boost-build
     - name: install boost-context
-      run: vcpkg.exe install boost-context:x64-windows
+      run: vcpkg.exe install libpng:x64-windows freetype:x64-windows curl:x64-windows libjpeg-turbo:x64-windows sdl2:x64-windows sdl2-net:x64-windows libvorbis:x64-windows libmad:x64-windows libogg:x64-windows libflac:x64-windows libtheora:x64-windows fluidsynth:x64-windows
+    - name: build scummvm
+      run: |
+        cd scummvm/devtools/create_project/cmake/
+        cmake .
+        cmake --build . -j
+        cd ../../../
+        devtools/create_project/cmake/create_project . --cmake
+        cmake -A x64 -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows
+        cmake --build . -j
     - name: show logs
       if: always()
       run: type D:\a\vcpkg\vcpkg\buildtrees\boost-context\build-x64-windows-rel-out.log
