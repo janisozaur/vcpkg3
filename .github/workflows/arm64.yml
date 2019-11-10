@@ -27,7 +27,6 @@ jobs:
     - name: Download ninja
       if: always()
       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64_arm64
         cl
         cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows-static bctest -A Arm64
         cmake --build . --config Debug
