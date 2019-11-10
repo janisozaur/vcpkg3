@@ -29,7 +29,7 @@ jobs:
         cmake .
         cmake --build . -j
         cd ../../../
-        devtools/create_project/cmake/create_project . --cmake
+        devtools/create_project/cmake/Debug/create_project.exe . --cmake
         cmake -A x64 -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows
         cmake --build . -j
     - name: show logs
