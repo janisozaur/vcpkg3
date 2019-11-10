@@ -27,7 +27,6 @@ jobs:
     - name: Download ninja
       if: always()
       run: |
-        cl
         cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows-static bctest -A Arm64
         cmake --build . --config Debug
     - uses: actions/upload-artifact@master
