@@ -11,31 +11,33 @@ jobs:
     - uses: actions/checkout@v1
     - name: show git head
       run: git --no-pager show HEAD
+    - name: install ninja
+      run: |
+          7z x ninja-win.zip -oC:\windows\system32
+          ninja --version
     - name: bootstrap vcpkg
       run: bootstrap-vcpkg.bat
-    - name: list dir
-      run: ls
+    - name: clone scummvm
+      run: git clone https://github.com/janisozaur/scummvm
     - name: show git head
       run: git --no-pager show HEAD
     - name: install boost-build
       run: vcpkg.exe install boost-build
-    - name: install boost-context
-      run: vcpkg.exe install boost-context:arm64-windows-static boost-test:arm64-windows-static
-    - name: show logs context
-      if: always()
-      run: type D:\a\vcpkg\vcpkg\buildtrees\boost-context\build-arm64-windows-static-rel-out.log
-    - name: Download ninja
-      if: always()
+    - name: install libs
+      run: vcpkg.exe install libpng:arm64-windows freetype:arm64-windows curl:arm64-windows libjpeg-turbo:arm64-windows sdl2:arm64-windows sdl2-net:arm64-windows libvorbis:arm64-windows libmad:arm64-windows libogg:arm64-windows libflac:arm64-windows libtheora:arm64-windows fluidsynth:arm64-windows
+    - name: export libs
       run: |
-        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows-static bctest -A Arm64
-        cmake --build . --config Debug
+          vcpkg.exe export libpng:arm64-windows freetype:arm64-windows curl:arm64-windows libjpeg-turbo:arm64-windows sdl2:arm64-windows sdl2-net:arm64-windows libvorbis:arm64-windows libmad:arm64-windows libogg:arm64-windows libflac:arm64-windows libtheora:arm64-windows fluidsynth:arm64-windows --zip
+          mkdir export
+          cp *.zip export
     - uses: actions/upload-artifact@master
       with:
-        name: boost-context-buildtree
-        path: D:\a\vcpkg\vcpkg\buildtrees\boost-context\
+        name: vcpkg-libs
+        path: D:\a\vcpkg\vcpkg\export
       if: always()
-    - uses: actions/upload-artifact@master
-      with:
-        name: boost-context-buildtree
-        path: D:\a\vcpkg\vcpkg\buildtrees\boost-context\
-      if: always()
+    - name: build scummvm
+      run: |
+        cd scummvm
+        %comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" arm64
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows . -GNinja
+        ninja -v
