@@ -11,11 +11,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: show git head
       run: git --no-pager show HEAD
-    - name: install ninja
-      run: |
-          7z x ninja-win.zip -oC:\windows\system32
-          ninja --version
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
     - name: bootstrap vcpkg
       run: bootstrap-vcpkg.bat
     - name: clone scummvm
@@ -39,9 +34,7 @@ jobs:
     - name: build scummvm
       run: |
         cd scummvm
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
-        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows . -GNinja
-        ninja -v
-    - name: show logs
-      if: always()
-      run: type D:\a\vcpkg\vcpkg\buildtrees\boost-context\build-x64-windows-rel-out.log
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows . -A x64
+        cmake --build
+        echo janis building
+        cmake --build . -j
