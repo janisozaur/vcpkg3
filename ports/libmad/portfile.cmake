@@ -18,9 +18,8 @@ vcpkg_extract_source_archive_ex(
 #The archive only contains a Visual Studio 6.0 era DSP project file, so use a custom CMakeLists.txt
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt DESTINATION ${SOURCE_PATH})
 
-#Use the msvc++ config.h and mad.h header
+#Use the msvc++ config.h header
 file(COPY ${SOURCE_PATH}/msvc++/config.h DESTINATION ${SOURCE_PATH})
-file(COPY ${SOURCE_PATH}/msvc++/mad.h DESTINATION ${SOURCE_PATH})
 
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
