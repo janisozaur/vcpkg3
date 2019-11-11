@@ -15,7 +15,7 @@ jobs:
       run: |
           7z x ninja-win.zip -oC:\windows\system32
           ninja --version
-          cmd /k "\"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat\" arm64"
+          cmd /k "\"C:\Program Files \(x86\)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat\" arm64"
     - name: bootstrap vcpkg
       run: bootstrap-vcpkg.bat
     - name: clone scummvm
@@ -39,6 +39,6 @@ jobs:
     - name: build scummvm
       run: |
         cd scummvm
-          cmd /k "\"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat\" arm64"
+          cmd /k "\"C:\Program Files \(x86\)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat\" arm64"
         cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows . -GNinja
         ninja -v
