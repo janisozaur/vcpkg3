@@ -1,0 +1,19 @@
+name: x86_64
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: install x64-windows
+      run: vcpkg.exe install libflac:x64-windows libflac:x64-uwp libflac:arm64-windows libflac:arm64-uwp
