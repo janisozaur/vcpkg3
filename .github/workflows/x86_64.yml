@@ -20,8 +20,3 @@ jobs:
     - name: show log
       if: always()
       run: type D:\a\vcpkg\vcpkg\buildtrees\libflac\install-x64-uwp-dbg-out.log
-    - uses: actions/upload-artifact@master
-      with:
-        name: logs-upload
-        path: D:\a\vcpkg\vcpkg\buildtrees\libflac
-      if: always()
