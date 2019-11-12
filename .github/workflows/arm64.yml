@@ -21,16 +21,6 @@ jobs:
       run: vcpkg.exe install boost-build
     - name: install libs
       run: vcpkg.exe install libpng:arm64-windows freetype:arm64-windows curl:arm64-windows libjpeg-turbo:arm64-windows sdl2:arm64-windows sdl2-net:arm64-windows libvorbis:arm64-windows libmad:arm64-windows libogg:arm64-windows libflac:arm64-windows libtheora:arm64-windows fluidsynth:arm64-windows
-    - name: export libs
-      run: |
-          vcpkg.exe export libpng:arm64-windows freetype:arm64-windows curl:arm64-windows libjpeg-turbo:arm64-windows sdl2:arm64-windows sdl2-net:arm64-windows libvorbis:arm64-windows libmad:arm64-windows libogg:arm64-windows libflac:arm64-windows libtheora:arm64-windows fluidsynth:arm64-windows --zip
-          mkdir export
-          cp *.zip export
-    - uses: actions/upload-artifact@master
-      with:
-        name: vcpkg-libs
-        path: D:\a\vcpkg3\vcpkg3\export
-      if: always()
     - name: build scummvm
       run: |
         cd scummvm
