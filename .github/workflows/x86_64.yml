@@ -29,12 +29,12 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: vcpkg-libs
-        path: D:\a\vcpkg\vcpkg\export
+        path: D:\a\vcpkg3\vcpkg3\export
       if: always()
     - name: build scummvm
       run: |
         cd scummvm
-        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows . -A x64
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows . -A x64
         cmake --build
         echo janis building
         cmake --build . -j
