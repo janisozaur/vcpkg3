@@ -17,17 +17,35 @@ jobs:
       run: git clone https://github.com/janisozaur/scummvm
     - name: show git head
       run: git --no-pager show HEAD
+    - name: install boost-build
+      run: vcpkg.exe install boost-build
     - name: install libs
-      run: vcpkg.exe install libmpeg2:x64-windows
+      run: vcpkg.exe install libpng:x64-windows freetype:x64-windows curl:x64-windows libjpeg-turbo:x64-windows sdl2:x64-windows sdl2-net:x64-windows libvorbis:x64-windows libmad:x64-windows libogg:x64-windows libflac:x64-windows libtheora:x64-windows fluidsynth:x64-windows libmpeg2:x64-windows
     - name: build scummvm-dbg
       run: |
-        cd mpeg2
-        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows . -A x64
+        mkdir scummvm/build-dbg
+        cd scummvm/build-dbg
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows .. -A x64
         cmake --build
         echo janis building
         cmake --build . -j --config Debug
+        cd ../../
+    - name: build scummvm-rel
+      run: |
+        mkdir scummvm/build-rel
+        cd scummvm/build-rel
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows .. -A x64
+        cmake --build
+        echo janis building
+        cmake --build . -j --config Release
+        cd ../../
+    - name: package
+      run: |
+        mkdir scummvm-package
+        cp scummvm/build-rel/Release/scummvm.exe scummvm-package/scummvm-rel.exe
+        cp scummvm/build-dbg/Debug/scummvm.exe scummvm-package/scummvm-dbg.exe
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
-        path: D:\a\vcpkg3\vcpkg3\mpeg2
+        path: D:\a\vcpkg3\vcpkg3\scummvm-package
       if: always()
