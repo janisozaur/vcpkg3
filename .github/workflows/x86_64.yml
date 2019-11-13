@@ -39,13 +39,13 @@ jobs:
         echo janis building
         cmake --build . -j --config Release
         cd ../../
+    - name: package
+      run: |
+        mkdir scummvm-package
+        cp scummvm/build-rel/Release/scummvm.exe scummvm-package/scummvm-rel.exe
+        cp scummvm/build-dbg/Debug/scummvm.exe scummvm-package/scummvm-dbg.exe
     - uses: actions/upload-artifact@master
       with:
-        name: scummvm-dbg-amd64
-        path: D:\a\vcpkg3\vcpkg3\scummvm\build-dbg
-      if: always()
-    - uses: actions/upload-artifact@master
-      with:
-        name: scummvm-rel-amd64
-        path: D:\a\vcpkg3\vcpkg3\scummvm\build-rel
+        name: scummvm-package
+        path: D:\a\vcpkg3\vcpkg3\scummvm-package
       if: always()
