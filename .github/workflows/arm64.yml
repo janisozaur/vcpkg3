@@ -21,10 +21,31 @@ jobs:
       run: vcpkg.exe install boost-build
     - name: install libs
       run: vcpkg.exe install libpng:arm64-windows freetype:arm64-windows curl:arm64-windows libjpeg-turbo:arm64-windows sdl2:arm64-windows sdl2-net:arm64-windows libvorbis:arm64-windows libmad:arm64-windows libogg:arm64-windows libflac:arm64-windows libtheora:arm64-windows fluidsynth:arm64-windows
-    - name: build scummvm
+    - name: build scummvm-dbg
       run: |
-        cd scummvm
-        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows . -A Arm64
+        mkdir scummvm/build-dbg
+        cd scummvm/build-dbg
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows .. -A Arm64
         cmake --build
         echo janis building
-        cmake --build . -j
+        cmake --build . -j --config Debug
+        cd ../../
+    - name: build scummvm-rel
+      run: |
+        mkdir scummvm/build-rel
+        cd scummvm/build-rel
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows .. -A Arm64
+        cmake --build
+        echo janis building
+        cmake --build . -j --config Release
+        cd ../../
+    - uses: actions/upload-artifact@master
+      with:
+        name: scummvm-dbg-arm64
+        path: D:\a\vcpkg3\vcpkg3\scummvm\build-dbg
+      if: always()
+    - uses: actions/upload-artifact@master
+      with:
+        name: scummvm-rel-arm64
+        path: D:\a\vcpkg3\vcpkg3\scummvm\build-rel
+      if: always()
