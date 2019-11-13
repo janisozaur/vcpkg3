@@ -1,0 +1,7 @@
+project(mpeg2-test)
+Include(FindMPEG2)
+Find_Package(MPEG2 REQUIRED)
+include_directories(${MPEG2_INCLUDE_DIRS})
+add_definitions(-DUSE_MPEG2)
+add_executable(mpeg2test mp2.cpp)
+target_link_libraries(mpeg2test ${MPEG2_mpeg2_LIBRARY})

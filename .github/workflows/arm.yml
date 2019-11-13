@@ -1,4 +1,4 @@
-name: arm64
+name: arm
 
 on: [push]
 
@@ -18,11 +18,11 @@ jobs:
     - name: show git head
       run: git --no-pager show HEAD
     - name: install libs
-      run: vcpkg.exe install libmpeg2:arm64-windows
+      run: vcpkg.exe install libmpeg2:arm-windows
     - name: build scummvm-dbg
       run: |
         cd mpeg2
-        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm64-windows . -A Arm64
+        cmake -DCMAKE_TOOLCHAIN_FILE=D:/a/vcpkg3/vcpkg3/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=arm-windows . -A Arm64
         cmake --build
         echo janis building
         cmake --build . -j --config Debug
