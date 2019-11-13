@@ -108,4 +108,4 @@ install(TARGETS mpeg2
     LIBRARY DESTINATION lib
 )
 
-install(FILES ${HEADERS} DESTINATION "include/libmpeg2")
+install(FILES ${HEADERS} DESTINATION "include/mpeg2dec")
