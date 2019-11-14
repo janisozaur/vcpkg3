@@ -1,0 +1,41 @@
+name: x86_64
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: install boost-build
+      run: |
+          vcpkg.exe install faad2[build_decoder]:x64-windows faad2[build_decoder]:x64-uwp faad2[build_decoder]:x86-windows faad2[build_decoder]:x86-windows-static faad2[build_decoder]:x86-windows-static faad2[build_decoder]:arm64-windows faad2[build_decoder]:arm-windows faad2[build_decoder]:arm64-uwp faad2[build_decoder]:arm-uwp faad2[build_decoder]:x64-windows-static
+          vcpkg.exe export faad2[build_decoder]:x64-windows faad2[build_decoder]:x64-uwp faad2[build_decoder]:x86-windows faad2[build_decoder]:x86-windows-static faad2[build_decoder]:x86-windows-static faad2[build_decoder]:arm64-windows faad2[build_decoder]:arm-windows faad2[build_decoder]:arm64-uwp faad2[build_decoder]:arm-uwp faad2[build_decoder]:x64-windows-static --zip
+          mkdir export
+          cp *.zip export
+    - name: show errors
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\faad2\install-x86-windows-dbg-out.log
+      if: failure()
+    - uses: actions/upload-artifact@master
+      with:
+        name: faad2-buildtree
+        path: D:\a\vcpkg3\vcpkg3\buildtrees\faad2
+      if: always()
+    - uses: actions/upload-artifact@master
+      with:
+        name: installed
+        path: D:\a\vcpkg3\vcpkg3\installed
+      if: always()
+    - uses: actions/upload-artifact@master
+      with:
+        name: libs-package
+        path: D:\a\vcpkg3\vcpkg3\export
+      if: always()
