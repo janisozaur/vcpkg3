@@ -1,4 +1,4 @@
-name: arm64-4-pangocairo
+name: arm64-icu
 
 on: [push]
 
@@ -15,8 +15,10 @@ jobs:
       run: bootstrap-vcpkg.bat
     - name: show git head
       run: git --no-pager show HEAD
+    - name: install boost-build
+      run: vcpkg.exe install boost-build
     - name: install libs
-      run: vcpkg.exe install pango:arm64-windows cairo:arm64-windows
+      run: vcpkg.exe install icu:arm64-windows boost-locale[icu]:arm64-windows
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
