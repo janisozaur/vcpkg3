@@ -16,7 +16,7 @@ jobs:
     - name: show git head
       run: git --no-pager show HEAD
     - name: install libs
-      run: vcpkg.exe install openssl:arm64-windows bzip2:arm64-windows zlib:arm64-windows libvorbis:arm64-windows
+      run: vcpkg.exe install sdl2:arm64-windows sdl2-image:arm64-windows sdl2-mixer:arm64-windows
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
