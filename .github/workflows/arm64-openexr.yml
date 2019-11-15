@@ -1,4 +1,4 @@
-name: arm64-kr
+name: arm64-openexr
 
 on: [push]
 
@@ -16,7 +16,10 @@ jobs:
     - name: show git head
       run: git --no-pager show HEAD
     - name: install libs
-      run: vcpkg.exe install eigen3:arm64-windows fftw3:arm64-windows ilmbase:arm64-windows lcms:arm64-windows gettext:arm64-windows opencolorio:arm64-windows
+      run: vcpkg.exe install openexr:arm64-windows
+    - name: show logs
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\openexr\install-arm64-windows-dbg-out.log
+      if: failure()
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package

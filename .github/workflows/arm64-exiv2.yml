@@ -19,6 +19,7 @@ jobs:
       run: vcpkg.exe install exiv2:arm64-windows
     - name: show logs
       run: type D:\a\vcpkg3\vcpkg3\buildtrees\exiv2\install-arm64-windows-dbg-out.log
+      if: failure()
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
