@@ -1,0 +1,24 @@
+name: arm64
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: install libs
+      run: vcpkg.exe install eigen3:arm64-windows exiv2:arm64-windows fftw3:arm64-windows ilmbase:arm64-windows lcms:arm64-windows openexr:arm64-windows gettext:arm64-windows
+    - uses: actions/upload-artifact@master
+      with:
+        name: scummvm-package
+        path: D:\a\vcpkg3\vcpkg3\installed
+      if: always()
