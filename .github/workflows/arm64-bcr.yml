@@ -1,0 +1,29 @@
+name: arm64-bcr
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: install boost-build
+      run: vcpkg.exe install boost-build
+    - name: install libs
+      run: vcpkg.exe install boost-coroutine:arm64-windows
+    - name: show log
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\boost-coroutine\build-arm64-windows-rel-out.log
+      if: failure()
+    - uses: actions/upload-artifact@master
+      with:
+        name: scummvm-package
+        path: D:\a\vcpkg3\vcpkg3\installed
+      if: always()
