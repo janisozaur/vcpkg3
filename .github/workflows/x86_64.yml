@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: skip
+      run: exit 1
     - name: show git head
       run: git --no-pager show HEAD
     - name: bootstrap vcpkg

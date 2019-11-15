@@ -1,4 +1,4 @@
-name: arm64
+name: arm64-2-boost
 
 on: [push]
 
