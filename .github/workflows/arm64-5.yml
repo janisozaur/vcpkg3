@@ -16,7 +16,7 @@ jobs:
     - name: show git head
       run: git --no-pager show HEAD
     - name: install libs
-      run: vcpkg.exe install eigen3:arm64-windows exiv2:arm64-windows fftw3:arm64-windows ilmbase:arm64-windows lcms:arm64-windows openexr:arm64-windows gettext:arm64-windows
+      run: vcpkg.exe install eigen3:arm64-windows exiv2:arm64-windows fftw3:arm64-windows ilmbase:arm64-windows lcms:arm64-windows openexr:arm64-windows gettext:arm64-windows opencolorio:arm64-windows
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
