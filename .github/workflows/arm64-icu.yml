@@ -19,6 +19,17 @@ jobs:
       run: vcpkg.exe install boost-build
     - name: install libs
       run: vcpkg.exe install icu:arm64-windows boost-locale[icu]:arm64-windows
+    - name: logs1
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\icu\configure-arm64-windows-rel-out.log
+      if: failure()
+    - name: logs2
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\icu\configure-arm64-windows-rel-err.log
+      if: failure()
+    - uses: actions/upload-artifact@master
+      with:
+        name: buildtrees
+        path: D:\a\vcpkg3\vcpkg3\buildtrees
+      if: always()
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
