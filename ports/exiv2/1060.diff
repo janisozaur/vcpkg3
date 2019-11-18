@@ -1,5 +1,5 @@
 diff --git a/src/makernote_int.cpp b/src/makernote_int.cpp
-index 2f5ad0ca..45f51146 100644
+index 20cd7629..6453586a 100644
 --- a/src/makernote_int.cpp
 +++ b/src/makernote_int.cpp
 @@ -95,7 +95,7 @@ namespace Exiv2 {
@@ -9,5 +9,5 @@ index 2f5ad0ca..45f51146 100644
 -#if defined(_MSC_VER) || defined(__MINGW__)
 +#if (defined(_MSC_VER) || defined(__MINGW__)) && !(defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP))
              char path[MAX_PATH];
-             if (SUCCEEDED(SHGetFolderPathA(nullptr, CSIDL_PROFILE, nullptr, 0, path))) {
+             if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, path))) {
                  homedir = std::string(path);
