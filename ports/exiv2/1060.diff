@@ -1,13 +1,21 @@
 diff --git a/src/makernote_int.cpp b/src/makernote_int.cpp
-index 20cd7629..6453586a 100644
+index 20cd7629..043daabc 100644
 --- a/src/makernote_int.cpp
 +++ b/src/makernote_int.cpp
-@@ -95,7 +95,7 @@ namespace Exiv2 {
+@@ -95,12 +95,15 @@ namespace Exiv2 {
          {
              std::string homedir;
              std::string inifile;
 -#if defined(_MSC_VER) || defined(__MINGW__)
-+#if (defined(_MSC_VER) || defined(__MINGW__)) && !(defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP))
++#if (defined(_MSC_VER) || defined(__MINGW__))
++    // In UWP you can't access files directly. Just skip the config.
++    #if !(defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP))
              char path[MAX_PATH];
              if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, path))) {
                  homedir = std::string(path);
+                 inifile = "exiv2.ini"      ;
+             }
++    #endif
+ #else
+             struct passwd* pw = getpwuid(getuid());
+             homedir = std::string(pw?pw->pw_dir:"");
