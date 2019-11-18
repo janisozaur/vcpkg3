@@ -11,6 +11,12 @@ vcpkg_from_github(
         1059.diff
 )
 
+if(VCPKG_TARGET_IS_UWP)
+    set(EXIV2_ENABLE_XMP FALSE)
+else()
+    set(EXIV2_ENABLE_XMP TRUE)
+endif()
+
 if((NOT VCPKG_CMAKE_SYSTEM_NAME OR VCPKG_CMAKE_SYSTEM_NAME STREQUAL "WindowsStore") AND ("unicode" IN_LIST FEATURES))
     set(enable_win_unicode TRUE)
 elseif()
@@ -25,6 +31,7 @@ vcpkg_configure_cmake(
         -DEXIV2_BUILD_EXIV2_COMMAND:BOOL=FALSE
         -DEXIV2_BUILD_UNIT_TESTS:BOOL=FALSE
         -DEXIV2_BUILD_SAMPLES:BOOL=FALSE
+        -DEXIV2_ENABLE_XMP:BOOL=${EXIV2_ENABLE_XMP}
 )
 
 vcpkg_install_cmake()
