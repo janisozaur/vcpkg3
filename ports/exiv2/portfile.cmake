@@ -9,6 +9,7 @@ vcpkg_from_github(
     PATCHES
         iconv.patch
         1059.diff
+        1060.diff
 )
 
 if(VCPKG_TARGET_IS_UWP)
