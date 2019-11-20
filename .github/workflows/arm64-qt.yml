@@ -1,0 +1,24 @@
+name: arm64-qt
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: install libs
+      run: vcpkg.exe install qt:arm64-windows
+    - uses: actions/upload-artifact@master
+      with:
+        name: buildroots-package
+        path: D:\a\vcpkg3\vcpkg3\buildroots
+      if: always()
