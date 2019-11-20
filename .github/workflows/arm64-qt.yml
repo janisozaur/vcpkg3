@@ -16,12 +16,12 @@ jobs:
     - name: show git head
       run: git --no-pager show HEAD
     - name: install libs
-      run: vcpkg.exe install qt:arm64-windows
+      run: vcpkg.exe install qt5:arm64-windows
     - name: logs1
-      run: type D:\a\vcpkg3\vcpkg3\buildtrees\qt\configure-arm64-windows-rel-out.log
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\qt5\configure-arm64-windows-rel-out.log
       if: always()
     - name: logs2
-      run: type D:\a\vcpkg3\vcpkg3\buildtrees\qt\install-arm64-windows-rel-out.log
+      run: type D:\a\vcpkg3\vcpkg3\buildtrees\qt5\install-arm64-windows-rel-out.log
       if: always()
     - uses: actions/upload-artifact@master
       with:
