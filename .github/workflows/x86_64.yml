@@ -1,0 +1,29 @@
+name: x86_64
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: show git head
+      run: git --no-pager show HEAD
+    - name: bootstrap vcpkg
+      run: bootstrap-vcpkg.bat
+    - name: install boost-build
+      run: vcpkg.exe install boost-build
+    - name: install boost
+      run: vcpkg.exe install boost:x64-windows
+    - uses: actions/upload-artifact@master
+      with:
+        name: scummvm-dbg-amd64
+        path: D:\a\vcpkg3\vcpkg3\buildtrees
+      if: always()
+    - uses: actions/upload-artifact@master
+      with:
+        name: scummvm-rel-amd64
+        path: D:\a\vcpkg3\vcpkg3\installed
+      if: always()
