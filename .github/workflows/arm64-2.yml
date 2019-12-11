@@ -18,7 +18,8 @@ jobs:
     - name: install boost-build
       run: vcpkg.exe install boost-build
     - name: install libs
-      run: vcpkg.exe install boost:arm64-windows
+      run: vcpkg.exe install sdl2:arm64-windows spdlog:arm64-windows glm:arm64-windows entt:arm64-windows
+      #run: vcpkg.exe install boost:arm64-windows
     - uses: actions/upload-artifact@master
       with:
         name: scummvm-package
